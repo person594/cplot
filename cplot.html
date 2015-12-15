@@ -1,0 +1,32 @@
+<html>
+	<head>
+		<style>
+		* { margin:0; padding:0; }
+
+		html, body { width:100%; height:100%; }
+
+		canvas { display:block; }
+		</style>
+		
+		<script src="cplot.js"></script>
+		<script src="expression.js"></script>
+		<script id="vertexShader" type="x-shader/x-vertex">
+			attribute vec3 aPosition;
+			
+			void main() {
+				gl_Position = vec4(aPosition, 1);
+			}
+		</script>
+		<script id="fragmentShader" type="x-shader/x-fragment">
+		void _foo() {
+			gl_FragColor = vec4(1, 0, 0, 1);
+		}
+		void main() {
+			_foo();
+		}
+		</script>
+	</head>
+	<body onload="init()">
+		<canvas id="plot"></canvas>
+	</body>
+</html>
