@@ -1,12 +1,42 @@
+function compileShaders(gl, expression) {
+	var fragHeader = document.getElementById("fragmentShader").text;
+	var parsedExpression = parse(tokenize(expression));
+	var fragExpression;
+	if (parsedExpression) {
+		fragExpression = "\nvec2 c = " + toGLSL(parsedExpression) + ";\n";
+	} else return false;
+	var fragFooter = [
+		"gl_FragColor = vec4(domain_color(c), 1);",
+		"}"
+	].join("\n");
+	var vShader = document.getElementById("vertexShader").text;
+	var fShader = fragHeader + fragExpression + fragFooter;
+	setup(gl, vShader, fShader);
+	return true;
+}
+
+
 function init(canvas, textbox, vShader, fShader) {
 	canvas = canvas || document.getElementById("plot");
-	vShader = vShader || document.getElementById("vertexShader").text;
-	fShader = fShader || document.getElementById("fragmentShader").text;
-	var context = canvas.getContext("webgl");
-	setup(context, vShader, fShader);
+	var gl = canvas.getContext("webgl");
+	
+	function resize() {
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+		render(gl);
+	}
+	
+	window.addEventListener('resize', resize, false);
+	resize();
+	var lastExpression = "";
 	var start = function() {
-		//canvasMaintainence(canvas);
-		render(context);
+		var expression = document.getElementById("textbox").value;
+		if (expression != lastExpression) {
+			lastExpression = expression;
+			if (compileShaders(gl, expression))
+				render(gl);
+		}
 		window.requestAnimationFrame(start);
 	};
 	start();
@@ -46,17 +76,6 @@ function setup(gl, vSource, fSource) {
 	gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
 	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
 	gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 0, 0);
-}
-
-
-function setupVbo(gl, program) {
-	
-}
-
-function canvasMaintainence(canvas) {
-	debugger;
-	canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
 }
 
 function render(gl) {

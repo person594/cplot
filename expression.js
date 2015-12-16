@@ -9,7 +9,7 @@ function tokenize(expression) {
 	var token = RegExp("(" + numericConstant + "|" + identifier + "|" + symbol + "|" + whitespace + ")", "g");
 	
 	var tokenStream = expression.match(token);
-	
+	if (!tokenStream) return false;
 	if (tokenStream.join("") != expression) return false;
 	
 	tokenStream = tokenStream.filter(function(token) {
@@ -40,6 +40,7 @@ function tokenize(expression) {
 */
  
 function parse(inputStream) {
+	if (!inputStream) return false;
 	var i = 0;
 	
 	function parseVariableName() {
@@ -84,9 +85,13 @@ function parse(inputStream) {
 		}
 		return fn ? [fn, inner] : inner;
 	}
-	//takes care of implied multiplication as well
+	//takes care of implied multiplication and unitary negation as well
 	function parseExponentialExpression() {
 		var i0 = i;
+		var sign;
+		if (inputStream[i] == '-' || inputStream[i] == '+') {
+			var sign = inputStream[i++];
+		}
 		var multiplicands = [parseAtomicExpression()];
 		if (!multiplicands[0]) return false;
 		var ae;
@@ -108,9 +113,12 @@ function parse(inputStream) {
 		multiplicands.slice(1).forEach(function(multiplicand) {
 			expression = ["*", expression, multiplicand];
 		});
+		if (sign == '-') {
+			expression = ["-", expression];
+		}
 		return expression;
 	}
-	
+	/*
 	//unitary + and -
 	function parseUnitaryExpression() {
 		var i0 = i;
@@ -127,14 +135,15 @@ function parse(inputStream) {
 			return ["-", e];
 		} else return e;
 	}
+	*/
 	
 	function parseMultiplicativeExpression() {
 		var i0 = i;
-		var left = parseUnitaryExpression();
+		var left = parseExponentialExpression();
 		if (!left) return false;
 		while (inputStream[i] == '*' || inputStream[i] == '/') {
 			var operator = inputStream[i++];
-			var right = parseUnitaryExpression();
+			var right = parseExponentialExpression();
 			if (! right) {
 				i = i0;
 				return false;
@@ -187,7 +196,7 @@ function toGLSL(expression) {
 				case "i":
 					return "vec2(0, 1)";
 				case "z":
-					return "a_z";
+					return "v_z";
 			}
 		}
 		return "{oops: " + expression + "}";
@@ -205,7 +214,7 @@ function toGLSL(expression) {
 		case "*":
 			return "_mult(" + toGLSL(expression[1]) + ", " + toGLSL(expression[2]) + ")";
 		case "/":
-			return "_mult(" + toGLSL(expression[1]) + ", inv(" + toGLSL(expression[2]) + "))";
+			return "_mult(" + toGLSL(expression[1]) + ", c_inv(" + toGLSL(expression[2]) + "))";
 		case "^":
 			return "_pow(" + toGLSL(expression[1]) + "," + toGLSL(expression[2]) + ")";
 	}
