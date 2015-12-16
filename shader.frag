@@ -103,12 +103,16 @@
 		}
 		
 		vec4 riemann_color(vec2 z, samplerCube cubemap) {
-			float theta = atan(z.x, z.y);
-			float phi = atan(1.0, length(z));
-			phi *= 2.0;
-			vec3 direction = vec3(cos(theta), 0, sin(theta));
-			direction *= sin(phi);
-			direction.y = -cos(phi);
+			vec3 direction;
+			if (isInf(z)) direction = vec3(0, 1, 0);
+			else {
+				float theta = atan(z.y, z.x);
+				float phi = atan(1.0, length(z));
+				phi *= 2.0;
+				direction = vec3(cos(theta), 0, sin(theta));
+				direction *= sin(phi);
+				direction.y = cos(phi);
+			}
 			return textureCube(cubemap, direction);
 		}
 		
