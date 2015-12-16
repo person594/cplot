@@ -1,7 +1,7 @@
 var numericConstant = "[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 var variableName = "z|e|i|pi";
 var functionName = "ln|log|lg|exp|gamma|abs|sqrt|sin|cos|tan|asin|acos|atan|sec|csc|cot|sinh|cosh|tanh";
-var identifier = variableName + "|" + functionName;
+var identifier = functionName + "|" + variableName;
 var symbol = "[\\[\\]()+*/^!-]";
 var whitespace = "(\\s|\\t|\\n|\\r|\\v)+";
 
