@@ -19,7 +19,7 @@
 			varying vec2 v_z;
 
 			void main() {
-				v_z = aPosition.xy * vec2(8, 4.5);
+				v_z = aPosition.xy * vec2(4, 2.25);
 				gl_Position = vec4(aPosition, 1);
 			}
 
@@ -27,6 +27,9 @@
 		</script>
 		<script id="fragmentShader" type="x-shader/x-fragment">
 		precision mediump float;
+		
+		uniform samplerCube u_earth;
+		
 		varying vec2 v_z;
 		
 		vec2 i = vec2(0, 1);
@@ -66,7 +69,7 @@
 		}
 		
 		vec2 c_sin(vec2 z) {
-			return .5 * (c_exp(_mult(z, i)) - c_exp(_mult(z, -i)));
+			return _div(c_exp(_mult(z, i)) - c_exp(_mult(z, -i)), vec2(0, 2));
 		}
 		
 		vec2 c_tan(vec2 z) {
@@ -126,6 +129,16 @@
 			return mag * c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 		}
 		
+		vec4 riemann_color(vec2 z, samplerCube cubemap) {
+			float theta = atan(z.x, z.y);
+			float phi = atan(1.0, length(z));
+			phi *= 2.0;
+			vec3 direction = vec3(cos(theta), 0, sin(theta));
+			direction *= sin(phi);
+			direction.y = -cos(phi);
+			return textureCube(cubemap, direction);
+		}
+		
 		void main() {
 			//the rest of the shader comes from javascript
 			
@@ -139,6 +152,15 @@
 			<form>
 				<input id="textbox" type="text" value="z" style="position: absolute; left: 10%; top: 90%; width:80%; height:40px;">
 			</form>
+		</div>
+		
+		<div style="display:none">
+			<img id="earthTop" src="img/earth/top.png">
+			<img id="earthBottom" src="img/earth/bottom.png">
+			<img id="earthLeft" src="img/earth/left.png">
+			<img id="earthRight" src="img/earth/right.png">
+			<img id="earthFront" src="img/earth/front.png">
+			<img id="earthBack" src="img/earth/back.png">
 		</div>
 		
 	</body>

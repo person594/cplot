@@ -1,4 +1,7 @@
 		precision mediump float;
+		
+		uniform samplerCube u_earth;
+		
 		varying vec2 v_z;
 		
 		vec2 i = vec2(0, 1);
@@ -38,7 +41,7 @@
 		}
 		
 		vec2 c_sin(vec2 z) {
-			return .5 * (c_exp(_mult(z, i)) - c_exp(_mult(z, -i)));
+			return _div(c_exp(_mult(z, i)) - c_exp(_mult(z, -i)), vec2(0, 2));
 		}
 		
 		vec2 c_tan(vec2 z) {
@@ -96,6 +99,16 @@
 			vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
 			vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
 			return mag * c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+		}
+		
+		vec4 riemann_color(vec2 z, samplerCube cubemap) {
+			float theta = atan(z.x, z.y);
+			float phi = atan(1.0, length(z));
+			phi *= 2.0;
+			vec3 direction = vec3(cos(theta), 0, sin(theta));
+			direction *= sin(phi);
+			direction.y = -cos(phi);
+			return textureCube(cubemap, direction);
 		}
 		
 		void main() {
