@@ -1,3 +1,5 @@
+var u_t = null;
+
 function compileShaders(gl, expression, textures) {
 	var fragHeader = document.getElementById("fragmentShader").text;
 	var parsedExpression = parse(tokenize(expression));
@@ -42,7 +44,7 @@ function init(canvas, textbox, vShader, fShader) {
 		} else if (shouldRedraw) {
 			render(gl);
 		}
-		shouldRedraw = false;
+		shouldRedraw = true;
 		window.requestAnimationFrame(start);
 	};
 	start();
@@ -94,7 +96,8 @@ function setup(gl, vSource, fSource, textures) {
 
 	gl.useProgram(program);
 
-	var aPosition = gl.getAttribLocation(program, "aPosition")
+	var aPosition = gl.getAttribLocation(program, "aPosition");
+	u_t = gl.getUniformLocation(program, "u_t");
 	var textureUniforms = {};
 	var i = 0;
 	for (texture in textures) {
@@ -122,6 +125,7 @@ function setup(gl, vSource, fSource, textures) {
 }
 
 function render(gl) {
+	gl.uniform1f(u_t, (Date.now() % 5000) / 5000);
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
 }
 

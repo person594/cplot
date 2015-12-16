@@ -1,6 +1,7 @@
 		precision mediump float;
 		
 		uniform samplerCube u_earth;
+		uniform float u_t;
 		
 		varying vec2 v_z;
 		

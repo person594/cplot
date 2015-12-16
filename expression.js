@@ -1,5 +1,5 @@
 var numericConstant = "[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
-var variableName = "z|e|i|pi";
+var variableName = "z|e|i|pi|t";
 var functionName = "ln|log|lg|exp|gamma|abs|sqrt|sinh?|cosh?|tanh?|asin|acos|atan|sech?|csch?|coth?";
 var identifier = functionName + "|" + variableName;
 var symbol = "[\\[\\]()+*/^!-]";
@@ -197,6 +197,8 @@ function toGLSL(expression) {
 					return "vec2(0, 1)";
 				case "z":
 					return "v_z";
+				case "t":
+					return "vec2(u_t, 0)";
 			}
 		}
 		return "{oops: " + expression + "}";
