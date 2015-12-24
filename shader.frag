@@ -104,7 +104,8 @@
 		
 		vec4 riemann_color(vec2 z, samplerCube cubemap) {
 			vec3 direction;
-			if (isInf(z)) direction = vec3(0, 1, 0);
+			float inf = 1.0/0.0;
+			if (abs(z.x) == inf || abs(z.y) == inf) direction = vec3(0, 1, 0);
 			else {
 				float theta = atan(z.y, z.x);
 				float phi = atan(1.0, length(z));
@@ -114,6 +115,10 @@
 				direction.y = cos(phi);
 			}
 			return textureCube(cubemap, direction);
+		}
+		
+		vec4 grid_color(vec2 z) {
+			return vec4(z.x, dot(z, vec2(-0.5, sqrt(.75))), dot(z, vec2(-0.5, -sqrt(.75))), 1);
 		}
 		
 		void main() {

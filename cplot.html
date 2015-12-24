@@ -26,21 +26,36 @@
 
 		</script>
 		<script id="fragmentShader" type="x-shader/x-fragment">
-				precision mediump float;
+		precision mediump float;
 		
 		uniform samplerCube u_earth;
 		uniform float u_t;
+		
+		//point at infinity
+		vec2 inf = vec2(1.0/0.0, 0);
+		
 		
 		varying vec2 v_z;
 		
 		vec2 i = vec2(0, 1);
 		
+		bool isinf(vec2 z) {
+			return (abs(z.x) == 1.0/0.0 || abs(z.y) == 1.0/0.0);
+		}
+		
 		vec2 c_exp(vec2 z) {
+			if (isinf(z)) {
+				return z.x > 0.0 ? inf : vec2(0,0);
+			}
 			return exp(z.x) * vec2(cos(z.y), sin(z.y));
 		}
 
 		vec2 c_abs(vec2 z) {
 			return vec2(length(z), 0);
+		}
+		
+		vec2 c_arg(vec2 z) {
+			return vec2(atan(z.y, z.x), 0);
 		}
 
 		vec2 c_conj(vec2 z) {
@@ -48,16 +63,19 @@
 		}
 		
 		vec2 c_inv(vec2 z) {
+			if (length(z) == 0.0) return inf;
 			return c_conj(z)/ dot(z,z);
 		}
 
 
 		vec2 c_ln(vec2 z) {
+			if (isinf(z)) return inf;
 			float theta = atan(z.y, z.x);
 			return vec2(log(length(z)), theta);
 		}
 
 		vec2 _mult(vec2 a, vec2 b) {
+			if (isinf(a) || isinf(b)) return inf;
 			return vec2(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x);
 		}
 		
@@ -132,8 +150,8 @@
 		
 		vec4 riemann_color(vec2 z, samplerCube cubemap) {
 			vec3 direction;
-			float inf = 1.0/0.0;
-			if (abs(z.x) == inf || abs(z.y) == inf) direction = vec3(0, 1, 0);
+			if (z != z) return vec4(1, 0, 1, 1);
+			if (isinf(z)) direction = vec3(0, 1, 0);
 			else {
 				float theta = atan(z.y, z.x);
 				float phi = atan(1.0, length(z));
@@ -143,6 +161,21 @@
 				direction.y = cos(phi);
 			}
 			return textureCube(cubemap, direction);
+		}
+		
+		vec4 grid_color(vec2 z) {
+			#define BAND_THICKNESS 0.05
+			vec3 color = domain_color(z);
+			color /= max(max(color.r, color.g), color.b);
+			int m = 0;
+			if (mod(z.x, 0.2) < 0.1) m++;
+			if (mod(z.y, 0.2) > 0.1) m++;
+			if (m == 0 || m == 2) color *= 0.0;
+			if (abs(1.0 - mod(length(z), 1.0)) < BAND_THICKNESS) {
+				color = vec3(1,1,1) - color;
+			}
+			if (z != z) return vec4(1, 0, 1, 1);
+			return vec4(color, 1);
 		}
 		
 		void main() {

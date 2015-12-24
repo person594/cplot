@@ -9,6 +9,7 @@ function compileShaders(gl, expression, textures) {
 	} else return false;
 	var fragFooter = [
 		"gl_FragColor = riemann_color(c, u_earth);",
+		//"gl_FragColor = grid_color(c);",
 		"}"
 	].join("\n");
 	var vShader = document.getElementById("vertexShader").text;
