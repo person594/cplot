@@ -24,19 +24,25 @@ function tokenize(expression) {
 
 
 /*
+	our grammar for parsing:
+	
 	atomicExpression:
 	{variableName}
-	| ( {expression} )
-	| [ {expression} ]
-	| {functionName} ( {expression} )
-	| {functionName} [ {expression} ]
+	| {numericConstant}
+	| '(' {expression} ')'
+	| '[' {expression} ']'
+	| {functionName} '(' {expression} ')'
+	| {functionName} '[' {expression} ']'
 	exponentialExpression:
-	{atomicExpression}+ ^ {exponentialExpression}
-	| {atomicExpression}+
+	['-']{atomicExpression}+ ['^' {exponentialExpression}]
 	multiplicativeExpression:
-	{exponentialExpression}
-	| {multiplicativeExpression} * {exponentialExpression}
-	| {multiplicativeExpression} / {exponentialExpression}
+	[{multiplicativeExpression} '*'] {exponentialExpression}
+	| {multiplicativeExpression} '/' {exponentialExpression}
+	additiveExpression:
+	[{additiveExpression} '+'] {multiplicativeExpression}
+	| {additiveExpression} '-' {multiplicativeExpression}
+	expression:
+	{additiveExpression}
 */
  
 function parse(inputStream) {
@@ -118,25 +124,7 @@ function parse(inputStream) {
 		}
 		return expression;
 	}
-	/*
-	//unitary + and -
-	function parseUnitaryExpression() {
-		var i0 = i;
-		var negate = false
-		if (inputStream[i] == "+" || inputStream[i] == "-") {
-			negate = (inputStream[++i] == '-');
-		}
-		var e = parseExponentialExpression();
-		if (!e) {
-			i =  i0;
-			return false;
-		}
-		if (negate) {
-			return ["-", e];
-		} else return e;
-	}
-	*/
-	
+
 	function parseMultiplicativeExpression() {
 		var i0 = i;
 		var left = parseExponentialExpression();
@@ -222,12 +210,3 @@ function toGLSL(expression) {
 	}
 	
 }
-
-
-console.log(toGLSL(
-	parse(
-		tokenize(
-			"3ze^4 * pi^52z"
-		)
-	)
-));

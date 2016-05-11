@@ -114,6 +114,7 @@
 				direction *= sin(phi);
 				direction.y = cos(phi);
 			}
+			//return vec4(mod(z.x, 1.0), mod(z.y, 1.0), 0, 1);
 			return textureCube(cubemap, direction);
 		}
 		

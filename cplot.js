@@ -1,19 +1,30 @@
 var u_t = null;
 
-function compileShaders(gl, expression, textures) {
-	var fragHeader = document.getElementById("fragmentShader").text;
-	var parsedExpression = parse(tokenize(expression));
-	var fragExpression;
-	if (parsedExpression) {
-		fragExpression = "\nvec2 c = " + toGLSL(parsedExpression) + ";\n";
-	} else return false;
-	var fragFooter = [
-		"gl_FragColor = riemann_color(c, u_earth);",
-		//"gl_FragColor = grid_color(c);",
-		"}"
+var vShader;
+var fHeader;
+var fFooter = [
+	"gl_FragColor = riemann_color(c, u_earth);",
+	//"gl_FragColor = domain_color(c);",
+	"}"
 	].join("\n");
-	var vShader = document.getElementById("vertexShader").text;
-	var fShader = fragHeader + fragExpression + fragFooter;
+
+function loadShaders() {
+	return $.when($.get("shader.vert"), $.get("shader.frag")).then(function(v, f) {
+		vShader = v[0];
+		fHeader = f[0];
+	});
+}
+
+
+function compileShaders(gl, expression, textures) {
+
+	var parsedExpression = parse(tokenize(expression));
+	var fExpression;
+	if (parsedExpression) {
+		fExpression = "\nvec2 c = " + toGLSL(parsedExpression) + ";\n";
+	} else return false;
+	
+	var fShader = fHeader + fExpression + fFooter;
 	setup(gl, vShader, fShader, textures);
 	return true;
 }
@@ -48,7 +59,7 @@ function init(canvas, textbox, vShader, fShader) {
 		shouldRedraw = true;
 		window.requestAnimationFrame(start);
 	};
-	start();
+	loadShaders().then(start)
 	
 }
 
@@ -84,6 +95,7 @@ function initTextures(gl) {
 function setup(gl, vSource, fSource, textures) {
 	var vShader = gl.createShader(gl.VERTEX_SHADER);
 	var fShader = gl.createShader(gl.FRAGMENT_SHADER);
+	
 
 	gl.shaderSource(vShader, vSource);
 	gl.shaderSource(fShader, fSource);
@@ -96,8 +108,13 @@ function setup(gl, vSource, fSource, textures) {
 	gl.linkProgram(program);
 
 	gl.useProgram(program);
-
+	
 	var aPosition = gl.getAttribLocation(program, "aPosition");
+	
+	width = 16;
+	height = 9;
+	var uBounds = gl.getUniformLocation(program, "uBounds");
+	gl.uniform4f(uBounds, -width/2, -height/2, width/2, height/2);
 	u_t = gl.getUniformLocation(program, "u_t");
 	var textureUniforms = {};
 	var i = 0;
