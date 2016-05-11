@@ -1,4 +1,8 @@
 var u_t = null;
+var uBounds = null;
+
+var canvas;
+var gl;
 
 var vShader;
 var fHeader;
@@ -7,6 +11,31 @@ var fFooter = [
 	//"gl_FragColor = domain_color(c);",
 	"}"
 	].join("\n");
+	
+var x = 0, y = 0, scale = 4;
+
+function updateBounds() {
+	var width = canvas.width;
+	var height = canvas.height;
+	var min = Math.min(width, height);
+	width /= min;
+	height /= min;
+	var x0 = x - scale * width/2;
+	var x1 = x + scale * width/2;
+	var y0 = y - scale * height/2;
+	var y1 = y + scale * height/2;
+	gl.uniform4f(uBounds, x0, y0, x1, y1);
+	shouldRedraw = true;
+}
+
+function onClick(e) {
+	
+}
+
+function onWheel(e) {
+	scale *= Math.exp(Math.sign(e.deltaY) / 10);
+	updateBounds();
+}
 
 function loadShaders() {
 	return $.when($.get("shader.vert"), $.get("shader.frag")).then(function(v, f) {
@@ -16,7 +45,7 @@ function loadShaders() {
 }
 
 
-function compileShaders(gl, expression, textures) {
+function compileShaders(expression, textures) {
 
 	var parsedExpression = parse(tokenize(expression));
 	var fExpression;
@@ -25,36 +54,40 @@ function compileShaders(gl, expression, textures) {
 	} else return false;
 	
 	var fShader = fHeader + fExpression + fFooter;
-	setup(gl, vShader, fShader, textures);
+	setup(vShader, fShader, textures);
 	return true;
 }
 
 
-function init(canvas, textbox, vShader, fShader) {
+function init(plotCanvas, textbox, vShader, fShader) {
 	canvas = canvas || document.getElementById("plot");
-	var gl = canvas.getContext("webgl");
+	gl = canvas.getContext("webgl");
 	
-	var textures = initTextures(gl);
+	var textures = initTextures();
 	
 	var shouldRedraw = true;
 	function resize() {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+		updateBounds();
 		shouldRedraw = true;
 	}
 	window.addEventListener('resize', resize, false);
 	resize();
+	
+	canvas.addEventListener("click", onClick, false);
+	canvas.addEventListener("wheel", onWheel, false);
 	
 	var lastExpression = "";
 	var start = function() {
 		var expression = document.getElementById("textbox").value;
 		if (expression != lastExpression) {
 			lastExpression = expression;
-			if (compileShaders(gl, expression, textures))
-				render(gl);
+			if (compileShaders(expression, textures))
+				render();
 		} else if (shouldRedraw) {
-			render(gl);
+			render();
 		}
 		shouldRedraw = true;
 		window.requestAnimationFrame(start);
@@ -64,7 +97,7 @@ function init(canvas, textbox, vShader, fShader) {
 }
 
 
-function initTextures(gl) {
+function initTextures() {
 	var earthTexture = gl.createTexture();
 	var frontImage = document.getElementById("earthFront");
 	var topImage = document.getElementById("earthTop");
@@ -92,7 +125,7 @@ function initTextures(gl) {
 	}
 }
 
-function setup(gl, vSource, fSource, textures) {
+function setup(vSource, fSource, textures) {
 	var vShader = gl.createShader(gl.VERTEX_SHADER);
 	var fShader = gl.createShader(gl.FRAGMENT_SHADER);
 	
@@ -113,8 +146,8 @@ function setup(gl, vSource, fSource, textures) {
 	
 	width = 16;
 	height = 9;
-	var uBounds = gl.getUniformLocation(program, "uBounds");
-	gl.uniform4f(uBounds, -width/2, -height/2, width/2, height/2);
+	uBounds = gl.getUniformLocation(program, "uBounds");
+	updateBounds();
 	u_t = gl.getUniformLocation(program, "u_t");
 	var textureUniforms = {};
 	var i = 0;
@@ -142,7 +175,7 @@ function setup(gl, vSource, fSource, textures) {
 	gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 0, 0);
 }
 
-function render(gl) {
+function render() {
 	gl.uniform1f(u_t, (Date.now() % 5000) / 5000);
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
 }
