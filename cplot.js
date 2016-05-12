@@ -28,12 +28,27 @@ function updateBounds() {
 	shouldRedraw = true;
 }
 
-function onClick(e) {
-	
+function onMouseMove(e) {
+	if (e.buttons & 1) {
+		min = Math.min(canvas.width, canvas.height);
+		x -= e.movementX * scale / min;
+		y += e.movementY * scale / min;
+		updateBounds();
+	}
 }
 
 function onWheel(e) {
+	var min = Math.min(canvas.width, canvas.height);
+	var xt = (e.x - canvas.width/2) / min;
+	var zoomX = xt * scale + x;
+	var yt = -(e.y - canvas.height/2) / min;
+	var zoomY = yt * scale + y;
+	
 	scale *= Math.exp(Math.sign(e.deltaY) / 10);
+	
+	x = zoomX - scale*xt;
+	y = zoomY - scale*yt;
+	
 	updateBounds();
 }
 
@@ -76,7 +91,7 @@ function init(plotCanvas, textbox, vShader, fShader) {
 	window.addEventListener('resize', resize, false);
 	resize();
 	
-	canvas.addEventListener("click", onClick, false);
+	canvas.addEventListener("mousemove", onMouseMove, false);
 	canvas.addEventListener("wheel", onWheel, false);
 	
 	var lastExpression = "";
