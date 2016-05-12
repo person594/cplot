@@ -1,8 +1,11 @@
 var u_t = null;
 var uBounds = null;
-
+var slider;
+var textbox;
 var canvas;
 var gl;
+
+var autoplay = true;
 
 var vShader;
 var fHeader;
@@ -13,6 +16,8 @@ var fFooter = [
 	].join("\n");
 	
 var x = 0, y = 0, scale = 4;
+
+var shouldRedraw = true;
 
 function updateBounds() {
 	var width = canvas.width;
@@ -75,18 +80,18 @@ function compileShaders(expression, textures) {
 
 
 function init(plotCanvas, textbox, vShader, fShader) {
-	canvas = canvas || document.getElementById("plot");
+	slider = document.getElementById("slider");
+	textbox = document.getElementById("textbox");
+	canvas = document.getElementById("plot");
 	gl = canvas.getContext("webgl");
 	
 	var textures = initTextures();
-	
-	var shouldRedraw = true;
+
 	function resize() {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 		updateBounds();
-		shouldRedraw = true;
 	}
 	window.addEventListener('resize', resize, false);
 	resize();
@@ -99,12 +104,14 @@ function init(plotCanvas, textbox, vShader, fShader) {
 		var expression = document.getElementById("textbox").value;
 		if (expression != lastExpression) {
 			lastExpression = expression;
-			if (compileShaders(expression, textures))
-				render();
-		} else if (shouldRedraw) {
+			if (compileShaders(expression, textures)) {
+				shouldRedraw = true;
+			}
+		}
+		updateTime();
+		if (shouldRedraw) {
 			render();
 		}
-		shouldRedraw = true;
 		window.requestAnimationFrame(start);
 	};
 	loadShaders().then(start)
@@ -190,9 +197,21 @@ function setup(vSource, fSource, textures) {
 	gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 0, 0);
 }
 
+function updateTime(t) {
+	if (timeDependent) {
+		slider.style.visibility = "visible";
+		t = t || (Date.now() % 5000) / 5000;
+		slider.value = t;
+		gl.uniform1f(u_t, t);
+		shouldRedraw = true;
+	} else {
+		slider.style.visibility = "hidden";
+	}
+}
+
 function render() {
-	gl.uniform1f(u_t, (Date.now() % 5000) / 5000);
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
+	shouldRedraw = timeDependent;
 }
 
 

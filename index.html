@@ -17,9 +17,10 @@
 	<body onload="init()">
 		<canvas id="plot"></canvas>
 		
-		<div id="wrapper">
+		<div id="wrapper" style="position: absolute; left: 10%; bottom: 10%; width:100%; height:40px;">
 			<form>
-				<input id="textbox" type="text" value="z" style="position: absolute; left: 10%; top: 90%; width:80%; height:40px;">
+				<input id="slider" type="range" value="0" min="0" max="1" step="0.001" style="width:80%; height:40px;">
+				<input id="textbox" type="text" value="z" style="width:80%; height:40px;">
 			</form>
 		</div>
 		

@@ -44,8 +44,12 @@ function tokenize(expression) {
 	expression:
 	{additiveExpression}
 */
- 
+
+var timeDependent;
+
 function parse(inputStream) {
+	var oldTimeDependent = timeDependent;
+	timeDependent = false;
 	if (!inputStream) return false;
 	var i = 0;
 	
@@ -53,6 +57,9 @@ function parse(inputStream) {
 		var token = inputStream[i];
 		if (token.match("^" + variableName + "$")) {
 			++i;
+			if (token == 't') {
+				timeDependent = true;
+			}
 			return token;
 		} else return false;
 	}
@@ -164,14 +171,14 @@ function parse(inputStream) {
 	
 	
 	var expression = parseExpression();
-	if (inputStream[i] != '\n') return false;
+	if (inputStream[i] != '\n') {
+		timeDependent = oldTimeDependent;
+		return false;
+	}
 	return expression;
 }
 
-
-
 function toGLSL(expression) {
-	
 	if (typeof(expression) == "string") {
 		if (expression.match("^" + numericConstant + "$")) {
 			return "vec2(" + expression + ", 0)";
