@@ -57,6 +57,22 @@ function onWheel(e) {
 	updateBounds();
 }
 
+function onSliderInput() {
+	autoplay = false;
+	sliderChanged = true;
+	updateTime(slider.value);
+}
+var sliderChanged = false;
+function onSliderPress() {
+	sliderChanged = false;
+}
+
+function onSliderClick() {
+	if (!sliderChanged) {
+		autoplay = !autoplay;
+	}
+}
+
 function loadShaders() {
 	return $.when($.get("shader.vert"), $.get("shader.frag")).then(function(v, f) {
 		vShader = v[0];
@@ -99,16 +115,29 @@ function init(plotCanvas, textbox, vShader, fShader) {
 	canvas.addEventListener("mousemove", onMouseMove, false);
 	canvas.addEventListener("wheel", onWheel, false);
 	
+	slider.addEventListener("mousedown", onSliderPress, false);
+	slider.addEventListener("click", onSliderClick, false);
+	slider.addEventListener("input", onSliderInput, true);
+	
 	var lastExpression = "";
 	var start = function() {
 		var expression = document.getElementById("textbox").value;
 		if (expression != lastExpression) {
 			lastExpression = expression;
 			if (compileShaders(expression, textures)) {
+				autoplay = true;
 				shouldRedraw = true;
 			}
 		}
-		updateTime();
+		
+		if (timeDependent) {
+			slider.style.visibility = "visible";
+			if (autoplay) {
+				updateTime();
+			}
+		} else {
+			slider.style.visibility = "hidden";
+		}
 		if (shouldRedraw) {
 			render();
 		}
@@ -198,15 +227,10 @@ function setup(vSource, fSource, textures) {
 }
 
 function updateTime(t) {
-	if (timeDependent) {
-		slider.style.visibility = "visible";
-		t = t || (Date.now() % 5000) / 5000;
-		slider.value = t;
-		gl.uniform1f(u_t, t);
-		shouldRedraw = true;
-	} else {
-		slider.style.visibility = "hidden";
-	}
+	t = t || (Date.now() % 5000) / 5000;
+	slider.value = t;
+	gl.uniform1f(u_t, t);
+	shouldRedraw = true;
 }
 
 function render() {
