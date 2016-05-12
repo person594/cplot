@@ -4,6 +4,8 @@
 		uniform samplerCube u_earth;
 		uniform float u_t;
 		
+		uniform int u_coloring_mode;
+		
 		varying vec2 v_z;
 		
 		vec2 i = vec2(0, 1);
@@ -148,6 +150,15 @@
 		
 		vec4 grid_color(vec2 z) {
 			return vec4(z.x, dot(z, vec2(-0.5, sqrt(.75))), dot(z, vec2(-0.5, -sqrt(.75))), 1);
+		}
+		
+		vec4 color(vec2 z) {
+			if (u_coloring_mode == 0) {
+				return riemann_color(z, u_earth);
+			} else if (u_coloring_mode == 1) {
+				return pretty_domain_color(z);
+			}
+			return vec4(1, 0, 1, 1);
 		}
 		
 		void main() {

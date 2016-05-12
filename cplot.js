@@ -1,9 +1,12 @@
 var u_t = null;
 var uBounds = null;
+var u_coloring_mode = null;
 var slider;
 var textbox;
 var canvas;
 var gl;
+
+var coloringMode = 1;
 
 var autoplay = true;
 
@@ -11,13 +14,26 @@ var vShader;
 var fHeader;
 var fFooter = [
 	//"gl_FragColor = riemann_color(c, u_earth);",
-	"gl_FragColor = pretty_domain_color(c);",
+	//"gl_FragColor = pretty_domain_color(c);",
+	"gl_FragColor = color(c);",
 	"}"
 	].join("\n");
 	
 var x = 0, y = 0, scale = 4;
 
 var shouldRedraw = true;
+
+function earthColor() {
+	coloringMode = 0;
+	gl.uniform1i(u_coloring_mode, 0);
+	shouldRedraw = true;
+}
+
+function gridColor() {
+	coloringMode = 1;
+	gl.uniform1i(u_coloring_mode, 1);
+	shouldRedraw = true;
+}
 
 function updateBounds() {
 	var width = canvas.width;
@@ -199,6 +215,8 @@ function setup(vSource, fSource, textures) {
 	height = 9;
 	uBounds = gl.getUniformLocation(program, "uBounds");
 	updateBounds();
+	u_coloring_mode = gl.getUniformLocation(program, "u_coloring_mode");
+	gl.uniform1i(u_coloring_mode, coloringMode);
 	u_t = gl.getUniformLocation(program, "u_t");
 	var textureUniforms = {};
 	var i = 0;
