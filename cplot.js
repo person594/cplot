@@ -10,8 +10,8 @@ var autoplay = true;
 var vShader;
 var fHeader;
 var fFooter = [
-	"gl_FragColor = riemann_color(c, u_earth);",
-	//"gl_FragColor = domain_color(c);",
+	//"gl_FragColor = riemann_color(c, u_earth);",
+	"gl_FragColor = pretty_domain_color(c);",
 	"}"
 	].join("\n");
 	
