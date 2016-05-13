@@ -22,6 +22,18 @@
 			return vec2(z.x, -z.y);
 		}
 		
+		vec2 c_real(vec2 z) {
+			return vec2(z.x, 0);
+		}
+		
+		vec2 c_imag(vec2 z) {
+			return vec2(z.y, 0);
+		}
+		
+		vec2 c_arg(vec2 z) {
+			return vec2(atan(z.y, z.x), 0);
+		}
+		
 		vec2 c_inv(vec2 z) {
 			return c_conj(z)/ dot(z,z);
 		}
