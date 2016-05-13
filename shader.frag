@@ -37,8 +37,7 @@
 		vec2 c_inv(vec2 z) {
 			return c_conj(z)/ dot(z,z);
 		}
-
-
+		
 		vec2 c_ln(vec2 z) {
 			float theta = atan(z.y, z.x);
 			return vec2(log(length(z)), theta);
@@ -102,6 +101,47 @@
 
 		vec2 _pow(vec2 a, vec2 b) {
 			return c_exp(_mult(c_ln(a), b));
+		}
+		
+		vec2 c_sqrt(vec2 z) {
+			return _pow(z, vec2(0.5, 0));
+		}
+		
+		vec2 c_gamma(vec2 z) {
+			//uses the Lanczos approximation, with code gratefully lifted from
+			//the python example at https://en.wikipedia.org/wiki/Lanczos_approximation
+			#define GAMMA_ITERATIONS 8
+			float p[8];
+			p[0] = 676.5203681218851;
+			p[1] = -1259.1392167224028;
+			p[2] = 771.32342877765313;
+			p[3] = -176.61502916214059;
+			p[4] = 12.507343278686905;
+			p[5] = -0.13857109526572012;
+			p[6] = 9.9843695780195716e-6;
+			p[7] = 1.5056327351493116e-7;
+			
+			bool flipped = false;
+			if (z.x < 0.5) {
+				z = vec2(1, 0) - z;
+				flipped = true;
+			}
+			z.x -= 1.0;
+			vec2 x = vec2(0.99999999999980993, 0); //magic number blindly taken from wikipedia 
+			for (int j = 0; j < GAMMA_ITERATIONS; ++j) {
+				vec2 z2 = z;
+				z2.x += float(j) + 1.0;
+				x += _div(vec2(p[j], 0), z2);
+			}
+			vec2 t = z + vec2(float(GAMMA_ITERATIONS) - 0.5, 0);
+			vec2 result = sqrt(2.0*PI) * _mult(_pow(t, z + vec2(0.5, 0)), _mult(c_exp(-t), x));
+			if (flipped) {
+				//the well known identity calls for the positive quotient, not the negative.
+				//however, we subtracted 1 from z earlier, shifting the sin function by
+				//one half period, therefore negating the value
+				result = -_div(vec2(PI, 0), _mult(c_sin(PI*z), result));
+			}
+			return result;
 		}
 		
 		vec4 domain_color(vec2 z) {
