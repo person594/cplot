@@ -1,5 +1,5 @@
 var numericConstant = "[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
-var variableName = "z|e|i|pi|t";
+var variableName = "(z|e|i|pi|t)";
 var functionName = "ln|log|lg|exp|gamma|abs|arg|sqrt|sinh?|cosh?|tanh?|asin|acos|atan|sech?|csch?|coth?|real|imag|conj|arg|sqrt";
 var identifier = functionName + "|" + variableName;
 var symbol = "[\\[\\]()+*/^!-]";
@@ -13,7 +13,7 @@ function tokenize(expression) {
 	if (tokenStream.join("") != expression) return false;
 	
 	tokenStream = tokenStream.filter(function(token) {
-		return ! token.match("^" + whitespace + "$");
+		return ! token.match("^(" + whitespace + ")$");
 	});
 	
 	tokenStream.push("\n");
@@ -55,7 +55,7 @@ function parse(inputStream) {
 	
 	function parseVariableName() {
 		var token = inputStream[i];
-		if (token.match("^" + variableName + "$")) {
+		if (token.match("^(" + variableName + ")$")) {
 			++i;
 			if (token == 't') {
 				timeDependent = true;
@@ -66,7 +66,7 @@ function parse(inputStream) {
 	
 	function parseFunctionName() {
 		var token = inputStream[i];
-		if (token.match("^" + functionName + "$")) {
+		if (token.match("^(" + functionName + ")$")) {
 			++i;
 			return token;
 		} else return false;
@@ -74,7 +74,7 @@ function parse(inputStream) {
 	
 	function parseNumericConstant() {
 		var token = inputStream[i];
-		if (token.match("^" + numericConstant + "$")) {
+		if (token.match("^(" + numericConstant + ")$")) {
 			++i;
 			return token;
 		} else return false;
@@ -180,9 +180,9 @@ function parse(inputStream) {
 
 function toGLSL(expression) {
 	if (typeof(expression) == "string") {
-		if (expression.match("^" + numericConstant + "$")) {
+		if (expression.match("^(" + numericConstant + ")$")) {
 			return "vec2(" + expression + ", 0)";
-		} else if (expression.match("^" + variableName + "$")) {
+		} else if (expression.match("^(" + variableName + ")$")) {
 			switch(expression) {
 				case "e":
 					return "vec2(" + String(Math.E) + ", 0)";
@@ -198,7 +198,7 @@ function toGLSL(expression) {
 		}
 		return "{oops: " + expression + "}";
 	}
-	if (expression[0].match("^" + functionName + "$")) {
+	if (expression[0].match("^(" + functionName + ")$")) {
 		return "c_" + expression[0] + "(" + toGLSL(expression[1]) + ")";
 	}
 	switch(expression[0]) {
