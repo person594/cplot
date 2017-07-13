@@ -137,12 +137,16 @@ function init(plotCanvas, textbox, vShader, fShader) {
 	
 	var lastExpression = "";
 	var start = function() {
-		var expression = document.getElementById("textbox").value;
+		var textbox = document.getElementById("textbox");
+		var expression = textbox.value;
 		if (expression != lastExpression) {
 			lastExpression = expression;
 			if (compileShaders(expression, textures)) {
 				autoplay = true;
 				shouldRedraw = true;
+				textbox.style.backgroundColor = "";
+			} else {
+				textbox.style.backgroundColor = "red";
 			}
 		}
 		
