@@ -92,6 +92,10 @@ function parse(inputStream) {
 		}
 		++i;
 		var inner = parseExpression();
+		if (!inner) {
+			i = i0;
+			return false;
+		}
 		if (inputStream[i++] != closer) {
 			 i = i0;
 			 return false;
