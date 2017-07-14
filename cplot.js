@@ -135,9 +135,18 @@ function init(plotCanvas, textbox, vShader, fShader) {
 	slider.addEventListener("click", onSliderClick, false);
 	slider.addEventListener("input", onSliderInput, true);
 	
+	
+	
+	var textbox = document.getElementById("textbox");
+	
+	if (window.location.hash.length > 0) {
+		expression = window.location.hash.substring(1)
+		expression = decodeURIComponent(expression)
+		textbox.value = expression
+	}
+	
 	var lastExpression = "";
 	var start = function() {
-		var textbox = document.getElementById("textbox");
 		var expression = textbox.value;
 		if (expression != lastExpression) {
 			lastExpression = expression;
@@ -145,6 +154,7 @@ function init(plotCanvas, textbox, vShader, fShader) {
 				autoplay = true;
 				shouldRedraw = true;
 				textbox.style.backgroundColor = "";
+				window.location.hash = encodeURIComponent(expression)
 			} else {
 				textbox.style.backgroundColor = "red";
 			}
