@@ -9,6 +9,23 @@
 			overflow: hidden; /*  Disable scrollbars */
 			display: block;  /* No floating content on sides */
 		}
+		
+		.button {
+			background-color: rgba(0, 0, 0, 0.25);
+			border: none;
+			border-radius: 5px;
+			color: white;
+			padding: 10px 10px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 14px;
+		}
+		
+		.button:hover { 
+			background-color: rgba(0, 0, 0, 1);
+		}
+		
 		</style>
 		<script src="jquery-2.2.3.min.js"></script>
 		<script src="cplot.js"></script>
@@ -21,7 +38,8 @@
 			<font color="white">
 			<form>
 				<input type="radio" name="coloring" value="grid" checked onclick="gridColor()"> Grid<br><br>
-				<input type="radio" name="coloring" value="earth" onclick="earthColor()"> Earth<br>
+				<input type="radio" name="coloring" value="earth" onclick="earthColor()"> Earth<br><br>
+				<input type="button" class="button" value="Reset View" onclick="resetView()">
 			</form>
 			</font>
 		</div>

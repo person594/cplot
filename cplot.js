@@ -35,6 +35,13 @@ function gridColor() {
 	shouldRedraw = true;
 }
 
+function resetView() {
+	x = 0;
+	y = 0;
+	scale = 4;
+	updateBounds()
+}
+
 function updateBounds() {
 	var width = canvas.width;
 	var height = canvas.height;
