@@ -118,7 +118,7 @@ function compileShaders(expression, textures) {
 }
 
 
-function init(plotCanvas, textbox, vShader, fShader) {
+function init() {
 	slider = document.getElementById("slider");
 	textbox = document.getElementById("textbox");
 	canvas = document.getElementById("plot");
