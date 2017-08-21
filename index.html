@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<title>Complex Function Viewer</title>
 		<style>
 		html, body {
 			width: 100%;
@@ -116,19 +117,34 @@
 		a:hover {
 			text-decoration: underline;
 		}
-		
 		</style>
+		
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+		<link rel="manifest" href="/manifest.json">
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+		<meta name="theme-color" content="#ffffff">
+		
 		<script src="jquery-2.2.3.min.js"></script>
 		<script src="cplot.js"></script>
 		<script src="expression.js"></script>
 		<script type="text/javascript" async src="Mathjax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-5822711-2', 'auto');
+			ga('send', 'pageview');
+		</script>
 	</head>
 	<body onload="init()">
 		<canvas id="plot"></canvas>
 		
 		<div class="helpframe" style="position:absolute; left:20px; top:5%;">
 			<div class="scrollframe">
-				<h2>Complex Function Plotter</h2>
+				<h2>Complex Function Visualizer</h2>
 				<p>
 					This is a tool to visualize functions from \(\mathbb{C} \to \mathbb{C}\).
 					It was largely inspired by a <a href='http://davidbau.com/conformal/'>similar application by David Bau</a>, but was re-implemented using WebGL for improved performance.
