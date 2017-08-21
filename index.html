@@ -148,9 +148,30 @@
 					<li><a href='#1/z'>1/z</a></li>
 					<li><a href='#conj(z)'>conj(z)</a></li>
 					<li><a href='#e^z'>e^z</a></li>
+					<li><a href='#ln(z)'>ln(z)</a></li>
 					<li><a href='#cos(z)'>cos(z)</a></li>
-					<li><a href='#exp(z)/exp(z+1)'>exp(z)/exp(z+1)</a></li>
+					<li><a href='#exp(z)/(1 + exp(z))'>exp(z)/(1 + exp(z))</a></li>
+					<li><a href='#z + real(z) / imag(z)'>z + real(z) / imag(z)</a></li>
+					<li><a href='#gamma(z+1)'>gamma(z+1)</a></li>
+					<li><a href='#(((((((((z^2+z)^2+z)^2+z)^2+z)^2+z)^2+z)^2+z)^2+z)^2+z)^2+z'>mandelbrot set approximation</a></li>
 				</ul>
+				<p>
+					The variable \(t\) can also be used to plot time-dependent functions.
+					\(t\) will vary between 0 and 1 automatically; it can also be changed manually with an on-screen slider.
+					Here are some examples of time-dependent functions:
+				</p>
+				<ul>
+					<li><a href='#zt'>zt</a></li>
+					<li><a href='#z*e^(2*pi*i*t)'>z*e^(2*pi*i*t)</a></li>
+					<li><a href='#z^t'>z^t</a></li>
+					<li><a href='#(((((((((z^10t+z)^10t+z)^10t+z)^10t+z)^10t+z)^10t+z)^10t+z)^10t+z)^10t+z)^10t+z'>multibrot set approximation of orders 0-10</a></li>
+				</ul>
+				<p>
+					In addition to the default domain coloring, points in the complex plane can also be mapped to points on the Earth, and colored accordingly.
+					This mapping, utilizing the Riemann sphere, maps \(0\) to the south pole and \(\infty\) to the north pole.
+					As this method relies on texture data for the earth, it is of much lower resolution than the default coloring, which is generated programatically.
+					Credit goes to <a href='https://mycodingwrongs.wordpress.com'>mycodingwrongs</a> for the <a href='https://mycodingwrongs.wordpress.com/2010/07/24/reprojecting-blue-marble/'>cubemap textures</a>.
+				</p>
 			</div>
 		</div>
 		
