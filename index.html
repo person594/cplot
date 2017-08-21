@@ -120,7 +120,7 @@
 		<script src="jquery-2.2.3.min.js"></script>
 		<script src="cplot.js"></script>
 		<script src="expression.js"></script>
-		<script type="text/javascript" async src="/Mathjax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+		<script type="text/javascript" async src="Mathjax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 	</head>
 	<body onload="init()">
 		<canvas id="plot"></canvas>
@@ -131,7 +131,13 @@
 				<p>
 					This is a tool to visualize functions from \(\mathbb{C} \to \mathbb{C}\).
 					It was largely inspired by a <a href='http://davidbau.com/conformal/'>similar application by David Bau</a>.
-				</p> 
+				</p>
+					Visualization is performed via domain coloring.
+					Each pixel of the screen corresponds to a point in the complex plane, and its color corresponds to the function value at that point.
+					To understand the coloring scheme, the <a href="#z">identity funcion</a> can be plotted.
+				<p>
+					
+				</p>
 			</div>
 		</div>
 		
