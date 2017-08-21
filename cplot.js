@@ -160,10 +160,10 @@ function init() {
 			if (compileShaders(expression, textures)) {
 				autoplay = true;
 				shouldRedraw = true;
-				textbox.style.backgroundColor = "";
+				textbox.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
 				window.location.hash = encodeURIComponent(expression)
 			} else {
-				textbox.style.backgroundColor = "red";
+				textbox.style.backgroundColor = "rgba(1, 0, 0, 0.5)";
 			}
 		}
 		
