@@ -8,6 +8,7 @@
 			border: 0;
 			overflow: hidden; /*  Disable scrollbars */
 			display: block;  /* No floating content on sides */
+			font-family: Helvetica, Arial, Sans-Serif;
 		}
 		
 		.button {
@@ -20,10 +21,67 @@
 			text-decoration: none;
 			display: inline-block;
 			font-size: 14px;
+			transition:.25s;
+
 		}
 		
 		.button:hover { 
 			background-color: rgba(0, 0, 0, 1);
+		}
+		
+		.frame {
+			padding: 20px;
+			background-color: rgba(0, 0, 0, 0.5);
+			border-style: none;
+			border-radius: 5px;
+			color: white;
+		}
+		
+		.helpframe{
+			padding: 0px;
+			color: rgba(0, 0, 0, 0);
+			background-color: rgba(0, 0, 0, 0.5);
+			border-style: none;
+			border-radius: 5px;
+			width: 40px;
+			height: 40px;
+			overflow: hidden;
+			transition:.25s;
+		}
+		
+		.helpframe:hover{
+			color: white;
+			width:25vw;
+			height:50vh;
+		}
+		
+		.helpframe:before {
+			font-weight: bold;
+			color: white;
+			content: '?';
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			text-align: center;
+			line-height: 40px;
+		}
+		
+		.helpframe:hover:before {
+			color: rgba(0, 0, 0, 0);
+		}
+		
+		.scrollframe {
+			box-sizing: border-box;
+			padding: 20px;
+			overflow: auto;
+			width:25vw;
+			height:50vh;
+			position: relative;
+			left:0px;
+			top:0px;
+		}
+		
+		.scrollframe:hover {
 		}
 		
 		.textbox {
@@ -33,6 +91,7 @@
 			background-color: rgba(0, 0, 0, 0.5);
 			border-style: none;
 			border-radius: 5px;
+			transition:.25s;
 		}
 		
 		.textbox:hover {
@@ -45,18 +104,24 @@
 		<script src="jquery-2.2.3.min.js"></script>
 		<script src="cplot.js"></script>
 		<script src="expression.js"></script>
+		<script type="text/javascript" async src="/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 	</head>
 	<body onload="init()">
 		<canvas id="plot"></canvas>
 		
-		<div style="position:absolute; left:20px; top:10%; padding: 20px; background-color: rgba(0, 0, 0, 0.5);">
-			<font color="white">
+		<div class="helpframe" style="position:absolute; left:20px; top:5%;">
+			<div class="scrollframe">
+				<h2>Complex Function Plotter</h2>
+				<p>This is a tool to visualize functions from [;\mathbb{C} \to \mathbb{C};].</p> 
+			</div>
+		</div>
+		
+		<div class="frame" style="position:absolute; right:20px; top:5%;">
 			<form>
 				<input type="radio" name="coloring" value="grid" checked onclick="gridColor()"> Grid<br><br>
 				<input type="radio" name="coloring" value="earth" onclick="earthColor()"> Earth<br><br>
 				<input type="button" class="button" value="Reset View" onclick="resetView()">
 			</form>
-			</font>
 		</div>
 		
 		<div id="wrapper" style="position: absolute; left: 10%; bottom: 10%; width:100%; height:40px;">
