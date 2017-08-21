@@ -153,7 +153,7 @@ function init() {
 			textbox.value = expression
 		}
 	}
-	window.addEventListener("hashchange", onHashChange, false);
+	window.onhashchange = onHashChange
 	onHashChange()
 	
 	var lastExpression = "";
