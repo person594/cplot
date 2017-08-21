@@ -146,11 +146,15 @@ function init() {
 	
 	var textbox = document.getElementById("textbox");
 	
-	if (window.location.hash.length > 0) {
-		expression = window.location.hash.substring(1)
-		expression = decodeURIComponent(expression)
-		textbox.value = expression
+	function onHashChange() {
+		if (window.location.hash.length > 0) {
+			expression = window.location.hash.substring(1)
+			expression = decodeURIComponent(expression)
+			textbox.value = expression
+		}
 	}
+	window.addEventListener("hashchange", onHashChange, false);
+	onHashChange()
 	
 	var lastExpression = "";
 	var start = function() {
