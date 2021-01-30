@@ -44,7 +44,7 @@ function resetView() {
 	updateBounds()
 }
 
-function updateBounds() {
+function getBounds() {
 	var width = canvas.width;
 	var height = canvas.height;
 	var min = Math.min(width, height);
@@ -54,12 +54,21 @@ function updateBounds() {
 	var x1 = x + scale * width/2;
 	var y0 = y - scale * height/2;
 	var y1 = y + scale * height/2;
+	return [x0, x1, y0, y1];
+}
+
+function updateBounds() {
+	var [x0, x1, y0, y1] = getBounds();
 	gl.uniform4f(uBounds, x0, y0, x1, y1);
 	shouldRedraw = true;
 }
 
 function onMouseMove(e) {
-	debugger;
+	var x_rel = e.clientX / canvas.width;
+	var y_rel = 1 - (e.clientY / canvas.height);
+	var [x0, x1, y0, y1] = getBounds();
+	var mouse_real = x_rel * x0 + (1 - x_rel) * x1;
+	var mouse_imag = y_rel * y0 + (1-y_rel) * y1;
 	if (e.buttons & 1) {
 		min = Math.min(canvas.width, canvas.height);
 		x -= e.movementX * scale / min;
