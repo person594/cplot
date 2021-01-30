@@ -6,6 +6,8 @@ var textbox;
 var canvas;
 var gl;
 
+var z_real_span, z_imag_span, f_real_span, f_imag_span;
+
 var coloringMode = 1;
 
 var autoplay = true;
@@ -57,6 +59,7 @@ function updateBounds() {
 }
 
 function onMouseMove(e) {
+	debugger;
 	if (e.buttons & 1) {
 		min = Math.min(canvas.width, canvas.height);
 		x -= e.movementX * scale / min;
@@ -121,6 +124,12 @@ function compileShaders(expression, textures) {
 function init() {
 	slider = document.getElementById("slider");
 	textbox = document.getElementById("textbox");
+	
+	z_real_span = document.getElementById("z-real")
+	z_imag_span = document.getElementById("z-imag")
+	f_real_span = document.getElementById("f-real")
+	f_imag_span = document.getElementById("f-imag")
+	
 	canvas = document.getElementById("plot");
 	gl = canvas.getContext("webgl");
 	
