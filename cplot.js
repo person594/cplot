@@ -72,8 +72,8 @@ function onMouseMove(e) {
 	var z_real = x_rel * x1 + (1 - x_rel) * x0;
 	var z_imag = y_rel * y1 + (1-y_rel) * y0;
 
-	mouse_value[0] = z_real
-	mouse_value[1] = z_imag
+	mouseValue[0] = z_real
+	mouseValue[1] = z_imag
 	
 	z_real_span.innerText = z_real.toFixed(2);
 	z_imag_span.innerText = z_imag.toFixed(2);
