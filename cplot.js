@@ -67,8 +67,12 @@ function onMouseMove(e) {
 	var x_rel = e.clientX / canvas.width;
 	var y_rel = 1 - (e.clientY / canvas.height);
 	var [x0, x1, y0, y1] = getBounds();
-	var mouse_real = x_rel * x1 + (1 - x_rel) * x0;
-	var mouse_imag = y_rel * y1 + (1-y_rel) * y0;
+	var z_real = x_rel * x1 + (1 - x_rel) * x0;
+	var z_imag = y_rel * y1 + (1-y_rel) * y0;
+	
+	z_real_span.innerText = z_real.toFixed(2);
+	z_imag_span.innerText = z_imag.toFixed(2);
+	
 	if (e.buttons & 1) {
 		min = Math.min(canvas.width, canvas.height);
 		x -= e.movementX * scale / min;
