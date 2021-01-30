@@ -6,6 +6,8 @@ var textbox;
 var canvas;
 var gl;
 
+var mouseValue = [0,0]
+
 var z_real_span, z_imag_span, f_real_span, f_imag_span;
 
 var coloringMode = 1;
@@ -69,9 +71,17 @@ function onMouseMove(e) {
 	var [x0, x1, y0, y1] = getBounds();
 	var z_real = x_rel * x1 + (1 - x_rel) * x0;
 	var z_imag = y_rel * y1 + (1-y_rel) * y0;
+
+	mouse_value[0] = z_real
+	mouse_value[1] = z_imag
 	
 	z_real_span.innerText = z_real.toFixed(2);
 	z_imag_span.innerText = z_imag.toFixed(2);
+	
+	// even if the function doesn't depend on the mouse position, we need to
+	// render to get the correct f(z) to display for the mouse position
+	shouldRedraw = true;
+	
 	
 	if (e.buttons & 1) {
 		min = Math.min(canvas.width, canvas.height);
@@ -125,7 +135,13 @@ function compileShaders(expression, textures) {
 	var parsedExpression = parse(tokenize(expression));
 	var fExpression;
 	if (parsedExpression) {
-		fExpression = "\nvec2 c = " + toGLSL(parsedExpression) + ";\n";
+		glsl = toGLSL(parsedExpression);
+		fExpression = "\n\
+		vec2 z = v_z;\n\
+		vec2 c = " + glsl + ";\n\
+		z = u_c;\n\
+		u_fc = " + glsl + ";\n\
+		";
 	} else return false;
 	
 	var fShader = fHeader + fExpression + fFooter;

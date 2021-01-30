@@ -195,7 +195,7 @@ function toGLSL(expression) {
 				case "i":
 					return "vec2(0, 1)";
 				case "z":
-					return "v_z";
+					return "z";
 				case "t":
 					return "vec2(u_t, 0)";
 			}
