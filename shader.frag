@@ -217,7 +217,7 @@
 		}
 		
 		vec2 f() {
-			//===FUNCTION==
+%%FUNCTION
 		}
 		
 		void main() {
