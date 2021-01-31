@@ -223,5 +223,4 @@
 		void main() {
 			vec2 fz = f();
 			gl_FragColor = color(fz);
-			//the rest of the shader comes from javascript
-			
+		}
