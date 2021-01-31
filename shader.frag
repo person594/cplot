@@ -216,6 +216,12 @@
 			return vec4(1, 0, 1, 1);
 		}
 		
+		vec2 f() {
+			//===FUNCTION==
+		}
+		
 		void main() {
+			vec2 fz = f();
+			gl_FragColor = color(fz);
 			//the rest of the shader comes from javascript
 			

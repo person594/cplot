@@ -16,13 +16,8 @@ var autoplay = true;
 
 var vShader;
 var fHeader;
-var fFooter = [
-	//"gl_FragColor = riemann_color(c, u_earth);",
-	//"gl_FragColor = pretty_domain_color(c);",
-	"gl_FragColor = color(c);",
-	"}"
-	].join("\n");
-	
+var fFooter;
+
 var x = 0, y = 0, scale = 4;
 
 var shouldRedraw = true;
@@ -125,7 +120,7 @@ function onSliderClick() {
 function loadShaders() {
 	return $.when($.get("shader.vert"), $.get("shader.frag")).then(function(v, f) {
 		vShader = v[0];
-		fHeader = f[0];
+		[fHeader, fFooter] = f[0].split("%%FUNCTION");
 	});
 }
 
@@ -136,12 +131,7 @@ function compileShaders(expression, textures) {
 	var fExpression;
 	if (parsedExpression) {
 		glsl = toGLSL(parsedExpression);
-		fExpression = "\n\
-		vec2 z = v_z;\n\
-		vec2 c = " + glsl + ";\n\
-		z = u_c;\n\
-		u_fc = " + glsl + ";\n\
-		";
+		fExpression = "return " + glsl + ";\n";
 	} else return false;
 	
 	var fShader = fHeader + fExpression + fFooter;
