@@ -6,6 +6,9 @@ var textbox;
 var canvas;
 var gl;
 
+var dataFrameBuffer;
+var dataTexture;
+
 var mouseValue = [0,0]
 
 var z_real_span, z_imag_span, f_real_span, f_imag_span;
@@ -152,6 +155,7 @@ function init() {
 	canvas = document.getElementById("plot");
 	gl = canvas.getContext("webgl");
 	
+	initDataFrameBuffer();
 	var textures = initTextures();
 
 	function resize() {
@@ -216,6 +220,22 @@ function init() {
 	
 }
 
+
+function initDataFrameBuffer() {
+	dataTexture = gl.createTexture();
+	gl.bindTexture(gl.TEXTURE_2D, dataTexture);
+	//since apparently many devices can't render to float buffers, we will
+	//pack our complex numbers into 4 bytes of RGBA :)
+	gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, window.innerWidth, window.innerHeight, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+	
+	dataFrameBuffer = gl.createFramebuffer();
+	gl.bindFramebuffer(gl.FRAMEBUFFER, dataFrameBuffer);
+	gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, dataTexture, 0);
+	
+}
 
 function initTextures() {
 	var earthTexture = gl.createTexture();
@@ -305,6 +325,7 @@ function updateTime(t) {
 }
 
 function render() {
+	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
 	shouldRedraw = timeDependent;
 }
