@@ -121,7 +121,7 @@ function onSliderClick() {
 }
 
 function loadShaders() {
-	return $.when($.get("shader.vert"), $.get("shader.frag"), $.get("math.frag")).then(function(v, f, m) {
+	return $.when($.get("shader.vert"), $.get("data_shader.frag"), $.get("math.frag")).then(function(v, f, m) {
 		vShader = v[0];
 		[fHeader, fFooter] = f[0].split("%%FUNCTION");
 		fHeader = m[0] + fHeader;
