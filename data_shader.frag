@@ -7,7 +7,7 @@
 	
 	varying vec2 v_z;
 	
-	float eps = 1e-6
+	float eps = 1e-6;
 	
 	float sigmoid(float x) {
 		return 1.0 / (1.0 + exp(-x));
