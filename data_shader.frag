@@ -31,8 +31,8 @@
 		// separately in complex numbers :)
 		vec2 lz = c_ln(z);
 		return vec4(
-			encode_range(lz.x, 10),
-			encode_range(lz, PI/2)
+			encode_range(lz.x, 10.0),
+			encode_range(lz, PI/2.0)
 		);
 	}
 	
