@@ -1,6 +1,4 @@
 //#include "math.frag"
-
-	precision mediump float;
 	
 	uniform samplerCube u_earth;
 	uniform float u_t;

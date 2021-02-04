@@ -1,3 +1,5 @@
+precision mediump float;
+
 		#define PI 3.1415926535898
 		
 		vec2 i = vec2(0, 1);
