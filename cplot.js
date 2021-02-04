@@ -150,7 +150,7 @@ function init() {
 	f_imag_span = document.getElementById("f-imag")
 	
 	canvas = document.getElementById("plot");
-	gl = canvas.getContext("webgl");
+	gl = canvas.getContext("webgl2");
 	
 	var textures = initTextures();
 
