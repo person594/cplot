@@ -15,7 +15,7 @@ var mouseValue = [0,0]
 
 var T = (Date.now() % 5000) / 5000;
 
-var z_real_span, z_imag_span, f_real_span, f_imag_span;
+var z_span, f_span;
 
 var coloringMode = 1;
 
@@ -54,6 +54,19 @@ function resetView() {
 	shouldRedraw = true;
 }
 
+function complex_string(a, b) {
+	s = a.toFixed(2);
+	if (b >= 0) {
+		s += " + ";
+	} else {
+		s += " - ";
+		b = -b;
+	}
+	s += b.toFixed(2);
+	s += "i";
+	return s;
+}
+
 function getBounds() {
 	var width = canvas.width;
 	var height = canvas.height;
@@ -77,13 +90,7 @@ function onMouseMove(e) {
 	mouseValue[0] = z_real
 	mouseValue[1] = z_imag
 	
-	z_real_span.innerText = z_real.toFixed(2);
-	z_imag_span.innerText = z_imag.toFixed(2);
-	
-	// even if the function doesn't depend on the mouse position, we need to
-	// render to get the correct f(z) to display for the mouse position
-	shouldRedraw = true;
-	
+	z_span.innerText = complex_string(z_real, z_imag);
 	
 	if (e.buttons & 1) {
 		min = Math.min(canvas.width, canvas.height);
@@ -155,11 +162,9 @@ function init() {
 	slider = document.getElementById("slider");
 	textbox = document.getElementById("textbox");
 	
-	z_real_span = document.getElementById("z-real")
-	z_imag_span = document.getElementById("z-imag")
-	f_real_span = document.getElementById("f-real")
-	f_imag_span = document.getElementById("f-imag")
-	
+	z_span = document.getElementById("z")
+	f_span = document.getElementById("f")
+
 	canvas = document.getElementById("plot");
 	gl = canvas.getContext("webgl");
 	
