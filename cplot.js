@@ -57,8 +57,8 @@ function resetView() {
 }
 
 function real_string(a) {
-	if (Math.abs(a) < 0.1 || Math.abs(a) >= 100) {
-		return a.toExponential(2);
+	if (Math.abs(a) < 0.1 || Math.abs(a) >= 10) {
+		return a.toExponential(1);
 	} else {
 		return a.toFixed(2);
 	}
