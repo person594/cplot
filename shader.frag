@@ -6,7 +6,6 @@
 	uniform int u_coloring_mode;
 	
 	uniform vec2 u_c;
-	uniform vec2 u_fc;
 	
 	varying vec2 v_z;
 	

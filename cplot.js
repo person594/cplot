@@ -1,5 +1,7 @@
 var u_t_visual = null;
 var u_t_data = null
+var u_c visual = null;
+var u_c data = null;
 var uBoundsVisual = null;
 var uBoundsData = null;
 var u_coloring_mode = null;
@@ -327,6 +329,9 @@ function setup(vSource, fSource, dSource, textures) {
 	
 	uBoundsVisual = gl.getUniformLocation(visualProgram, "uBounds");
 	uBoundsData = gl.getUniformLocation(dataProgram, "uBounds");
+	
+	u_c_visual = gl.getUniformLocation(visualProgram, "u_c");
+	u_c_data = gl.getUniformLocation(dataProgram, "u_c");
 
 	u_coloring_mode = gl.getUniformLocation(visualProgram, "u_coloring_mode");
 	
@@ -397,6 +402,7 @@ function render_visual() {
 	var [x0, x1, y0, y1] = getBounds();
 	gl.useProgram(visualProgram);
 	gl.uniform4f(uBoundsVisual, x0, y0, x1, y1);
+	gl.uniform2f(u_c_visual, mouseValue[0], mouseValue[1]);
 	gl.uniform1i(u_coloring_mode, coloringMode);
 	gl.uniform1f(u_t_visual, T);
 	gl.bindFramebuffer(gl.FRAMEBUFFER, null);
@@ -407,6 +413,7 @@ function render_data() {
 	var [x0, x1, y0, y1] = getBounds();
 	gl.useProgram(dataProgram);
 	gl.uniform4f(uBoundsData, x0, y0, x1, y1);
+	gl.uniform2f(u_c_data, mouseValue[0], mouseValue[1]);
 	gl.uniform1f(u_t_data, T);
 	gl.bindFramebuffer(gl.FRAMEBUFFER, dataFrameBuffer);
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
