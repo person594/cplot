@@ -15,11 +15,11 @@
 	
 	vec2 encode_range(float x, float range) {
 		x = clamp(x, -range, range);
-		x = (x + range) / (2.0 * range) - eps;
-		// x is in [0, 1) now
-		vec2 encoded;
-		encoded.x = x; // ignores
+		x = (x + range) / (2.0 * range)
+		// x is in [0, 1] now
 		x *= 256.0;
+		vec2 encoded;
+		encoded.x = floor(x) / 255.0;
 		encoded.y = mod(x, 1.0);
 		return encoded;
 	}
