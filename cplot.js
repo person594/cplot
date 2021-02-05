@@ -109,6 +109,7 @@ function onMouseMove(e) {
 		y += e.movementY * scale / min;
 		shouldRedraw = true;
 	}
+	MathJax.typeset();
 }
 
 function onWheel(e) {
