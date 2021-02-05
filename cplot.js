@@ -56,19 +56,27 @@ function resetView() {
 	shouldRedraw = true;
 }
 
+function real_string(a) {
+	if (a < 0.1 || a >= 100) {
+		return a.toExponential(2);
+	} else {
+		return a.toFixed(2);
+	}
+}
+
 function complex_string(a, b) {
 	if (!(isFinite(a) && isFinite(b))) {
 		return "∞"
 	}
-	s = a.toFixed(2);
+	s = real_string(a);
 	if (b >= 0) {
 		s += " + ";
 	} else {
 		s += " - ";
 		b = -b;
 	}
-	s += b.toFixed(2);
-	s += "i";
+	s += real_string(b)
+	s += "<i>i</i>";
 	return s;
 }
 
