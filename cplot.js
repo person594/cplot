@@ -31,6 +31,8 @@ var visualProgram, dataProgram;
 
 var x = 0, y = 0, scale = 4;
 
+var data_pixels;
+
 var shouldRedraw = true;
 
 function earthColor() {
@@ -168,6 +170,7 @@ function init() {
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
 		gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+		data_pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4)
 		shouldRedraw = true;
 	}
 	window.addEventListener('resize', resize, false);
@@ -358,6 +361,7 @@ function render_data() {
 	gl.uniform1f(u_t_data, T);
 	gl.bindFramebuffer(gl.FRAMEBUFFER, dataFrameBuffer);
 	gl.drawArrays(gl.TRIANGLES, 0, 6);
+	gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, data_pixels);
 }
 
 function render() {
