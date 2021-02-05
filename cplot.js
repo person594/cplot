@@ -392,6 +392,8 @@ function render_data() {
 function render() {
 	render_visual();
 	render_data();
+	// just to handle animations with the mouse -- kind of a hack...
+	onMouseMove();
 	shouldRedraw = timeDependent;
 }
 
