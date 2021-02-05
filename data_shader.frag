@@ -20,7 +20,7 @@
 		x *= 255.0 + 255.0/256.0;
 		vec2 encoded;
 		encoded.x = floor(x) / 255.0;
-		encoded.y = mod(x, 1.0);
+		encoded.y = mod(x, 1.0) * 256./255.;
 		return encoded;
 	}
 	
