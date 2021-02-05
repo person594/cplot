@@ -81,8 +81,8 @@ function getBounds() {
 }
 
 function onMouseMove(e) {
-	var x_rel = e.clientX / canvas.width;
-	var y_rel = 1 - (e.clientY / canvas.height);
+	var x_rel = e.clientX / (canvas.width-1);
+	var y_rel = 1 - (e.clientY / (canvas.height-1));
 	var [x0, x1, y0, y1] = getBounds();
 	var z_real = x_rel * x1 + (1 - x_rel) * x0;
 	var z_imag = y_rel * y1 + (1-y_rel) * y0;
