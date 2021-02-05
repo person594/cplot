@@ -352,7 +352,12 @@ function render_visual() {
 }
 
 function render_data() {
-	
+	var [x0, x1, y0, y1] = getBounds();
+	gl.useProgram(dataProgram);
+	gl.uniform4f(uBoundsData, x0, y0, x1, y1);
+	gl.uniform1f(u_t_data, T);
+	gl.bindFramebuffer(gl.FRAMEBUFFER, dataFrameBuffer);
+	gl.drawArrays(gl.TRIANGLES, 0, 6);
 }
 
 function render() {
