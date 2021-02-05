@@ -57,7 +57,7 @@ function resetView() {
 }
 
 function complex_string(a, b) {
-	if (!(a.isFinite(a) && isFinite(b))) {
+	if (!(isFinite(a) && isFinite(b))) {
 		return "&infin;";
 	}
 	s = a.toFixed(2);
