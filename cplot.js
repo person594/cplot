@@ -58,7 +58,7 @@ function resetView() {
 
 function complex_string(a, b) {
 	if (!(isFinite(a) && isFinite(b))) {
-		return "\\(\\infty\\)";
+		return "∞"
 	}
 	s = a.toFixed(2);
 	if (b >= 0) {
@@ -109,9 +109,6 @@ function onMouseMove(e) {
 		y += e.movementY * scale / min;
 		shouldRedraw = true;
 	}
-	MathJax.Hub.Typeset(f_span);
-	//MathJax.Hub.Queue(["Typeset",MathJax.Hub, z_span]);
-	//MathJax.Hub.Queue(["Typeset",MathJax.Hub, f_span]);
 }
 
 function onWheel(e) {
