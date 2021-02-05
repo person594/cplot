@@ -107,9 +107,9 @@ function onMouseMove(e) {
 	mouseValue[0] = z_real
 	mouseValue[1] = z_imag
 	
-	z_span.innerText = complex_string(z_real, z_imag);
+	z_span.innerHTML = complex_string(z_real, z_imag);
 	[f_real, f_imag] = get_pixel_value(mouseX, mouseY);
-	f_span.innerText = complex_string(f_real, f_imag);
+	f_span.innerHTML = complex_string(f_real, f_imag);
 	
 	if (e && e.buttons & 1) {
 		min = Math.min(canvas.width, canvas.height);
