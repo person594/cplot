@@ -46,10 +46,13 @@ function tokenize(expression) {
 */
 
 var timeDependent;
+var mouseDependent;
 
 function parse(inputStream) {
 	var oldTimeDependent = timeDependent;
+	var oldMouseDependent = mouseDependent;
 	timeDependent = false;
+	mouseDependent = false;
 	if (!inputStream) return false;
 	var i = 0;
 	
@@ -59,6 +62,8 @@ function parse(inputStream) {
 			++i;
 			if (token == 't') {
 				timeDependent = true;
+			} else if (token == 'c') {
+				mouseDependent = true;
 			}
 			return token;
 		} else return false;
@@ -177,6 +182,7 @@ function parse(inputStream) {
 	var expression = parseExpression();
 	if (inputStream[i] != '\n') {
 		timeDependent = oldTimeDependent;
+		mouseDependent = oldMouseDependent;
 		return false;
 	}
 	return expression;

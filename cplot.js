@@ -119,6 +119,9 @@ function onMouseMove(e) {
 		y += e.movementY * scale / min;
 		shouldRedraw = true;
 	}
+	if (mouseDependent) {
+		shouldRedraw = true;
+	}
 }
 
 function onWheel(e) {
