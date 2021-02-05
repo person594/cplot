@@ -1,7 +1,7 @@
 var u_t_visual = null;
 var u_t_data = null
-var u_c visual = null;
-var u_c data = null;
+var u_c_visual = null;
+var u_c_data = null;
 var uBoundsVisual = null;
 var uBoundsData = null;
 var u_coloring_mode = null;
