@@ -141,14 +141,15 @@ precision mediump float;
 		vec2 c_G(vec2 m, vec2 z, vec2 y) {
 			#define G_ITERATIONS 20
 			vec2 sm = vec2(0);
-			for (int i = 0; i < LI_ITERATIONS; ++i) {
+			for (int i = 0; i < G_ITERATIONS; ++i) {
 				vec2 j = vec2(i, 0);
-				sm += _mul(_pow(j,-m), _pow(_div(y, z), j));
+				sm += _mult(_pow(j,-m), _pow(_div(y, z), j));
 			}
+			return sm;
 		}
 		
 		vec2 c_li(vec2 s, vec2 z) {
-			return -c_G(s, _inv(z), vec2(1,0));
+			return -c_G(s, c_inv(z), vec2(1,0));
 			
 			/*
 			#define LI_ITERATIONS 20
