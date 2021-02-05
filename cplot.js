@@ -57,6 +57,9 @@ function resetView() {
 }
 
 function complex_string(a, b) {
+	if (!(a.isFinite(a) && isFinite(b))) {
+		return &infin;
+	}
 	s = a.toFixed(2);
 	if (b >= 0) {
 		s += " + ";
@@ -360,6 +363,13 @@ function decode_range(a, b, range) {
 function get_pixel_value(x, y) {
 	y = gl.drawingBufferHeight - y - 1;
 	var i = 4*(y*gl.drawingBufferWidth + x);
+	if (data_pixels[i] == 0 && data_pixels[i+1] == 0) {
+		//underflow, return 0
+		return [0, 0];
+	} else if (data_pixels[i] == 255 && data_pixels[i+1] == 255) {
+		//overflow, return infinity
+		return [Infinity, Infinity];
+	}
 	var real_part = decode_range(data_pixels[i], data_pixels[i+1], 10)
 	var imag_part = decode_range(data_pixels[i+2], data_pixels[i+3], Math.PI)
 	var r = Math.exp(real_part);

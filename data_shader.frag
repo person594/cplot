@@ -15,7 +15,7 @@
 	
 	vec2 encode_range(float x, float range) {
 		x = clamp(x, -range, range);
-		x = (x + range) / (2.0 * range)
+		x = (x + range) / (2.0 * range);
 		// x is in [0, 1] now
 		x *= 256.0;
 		vec2 encoded;
