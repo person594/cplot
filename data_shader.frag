@@ -17,7 +17,7 @@
 		x = clamp(x, -range, range);
 		x = (x + range) / (2.0 * range);
 		// x is in [0, 1] now
-		x *= 256.0;
+		x *= 255.0 + 255.0/256.0;
 		vec2 encoded;
 		encoded.x = floor(x) / 255.0;
 		encoded.y = mod(x, 1.0);
