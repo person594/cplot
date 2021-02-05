@@ -345,8 +345,8 @@ function decode_range(a, b, range) {
 
 function get_pixel_value(x, y) {
 	var i = 4*(y*gl.drawingBufferWidth + x);
-	var real_part = decode_range(x[i], x[i+1], 10)
-	var imag_part = decode_range(x[i+2], x[i+3], Math.PI)
+	var real_part = decode_range(data_pixels[i], data_pixels[i+1], 10)
+	var imag_part = decode_range(data_pixels[i+2], data_pixels[i+3], Math.PI)
 	var r = Math.exp(real_part);
 	var theta = imag_part;
 	real_part = r * Math.cos(theta);
