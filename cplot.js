@@ -109,8 +109,9 @@ function onMouseMove(e) {
 		y += e.movementY * scale / min;
 		shouldRedraw = true;
 	}
-	MathJax.Hub.Queue(["Typeset",MathJax.Hub, z_span]);
-	MathJax.Hub.Queue(["Typeset",MathJax.Hub, f_span]);
+	MathJax.Hub.Typeset(f_span);
+	//MathJax.Hub.Queue(["Typeset",MathJax.Hub, z_span]);
+	//MathJax.Hub.Queue(["Typeset",MathJax.Hub, f_span]);
 }
 
 function onWheel(e) {
