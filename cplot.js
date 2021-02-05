@@ -91,6 +91,8 @@ function onMouseMove(e) {
 	mouseValue[1] = z_imag
 	
 	z_span.innerText = complex_string(z_real, z_imag);
+	[f_real, f_imag] = get_pixel_value(e.clientX, e.clientY);
+	f_span.innerText = complex_string(f_real, f_imag);
 	
 	if (e.buttons & 1) {
 		min = Math.min(canvas.width, canvas.height);
@@ -314,6 +316,7 @@ function setup(vSource, fSource, dSource, textures) {
 	u_t_visual = gl.getUniformLocation(visualProgram, "u_t");
 	u_t_data = gl.getUniformLocation(dataProgram, "u_t");
 	
+	gl.useProgram(visualProgram);
 	var textureUniforms = {};
 	var i = 0;
 	for (texture in textures) {
@@ -349,6 +352,7 @@ function decode_range(a, b, range) {
 }
 
 function get_pixel_value(x, y) {
+	y = gl.drawingBufferHeight - y - 1;
 	var i = 4*(y*gl.drawingBufferWidth + x);
 	var real_part = decode_range(data_pixels[i], data_pixels[i+1], 10)
 	var imag_part = decode_range(data_pixels[i+2], data_pixels[i+3], Math.PI)
