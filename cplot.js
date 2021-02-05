@@ -27,6 +27,8 @@ var fFooter;
 var dHeader;
 var dFooter;
 
+var mouseX = 0, mouseY = 0;
+
 var visualProgram, dataProgram;
 
 var x = 0, y = 0, scale = 4;
@@ -81,8 +83,12 @@ function getBounds() {
 }
 
 function onMouseMove(e) {
-	var x_rel = e.clientX / (canvas.width-1);
-	var y_rel = 1 - (e.clientY / (canvas.height-1));
+	if (e) {
+		mouseX = e.clientX;
+		mouseY = e.clientY;
+	}
+	var x_rel = mouseX / (canvas.width-1);
+	var y_rel = 1 - (mouseY / (canvas.height-1));
 	var [x0, x1, y0, y1] = getBounds();
 	var z_real = x_rel * x1 + (1 - x_rel) * x0;
 	var z_imag = y_rel * y1 + (1-y_rel) * y0;
@@ -91,10 +97,10 @@ function onMouseMove(e) {
 	mouseValue[1] = z_imag
 	
 	z_span.innerText = complex_string(z_real, z_imag);
-	[f_real, f_imag] = get_pixel_value(e.clientX, e.clientY);
+	[f_real, f_imag] = get_pixel_value(mouseX, mouseY);
 	f_span.innerText = complex_string(f_real, f_imag);
 	
-	if (e.buttons & 1) {
+	if (e && e.buttons & 1) {
 		min = Math.min(canvas.width, canvas.height);
 		x -= e.movementX * scale / min;
 		y += e.movementY * scale / min;
