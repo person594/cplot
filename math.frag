@@ -137,3 +137,16 @@ precision mediump float;
 			}
 			return result;
 		}
+		
+		vec2 c_li(vec2 s, vec2 z) {
+			#define LI_ITERATIONS 20
+			vec2 sm = vec2(0, 0);
+			
+			for (int i = 0; i < LI_ITERATIONS; ++i) {
+				vec2 k = vec2(i+1, 0);
+				sm += c_div(c_pow(z, k), c_pow(k, s));
+			}
+			return sm;
+		}
+		
+		

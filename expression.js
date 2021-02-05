@@ -1,8 +1,8 @@
 var numericConstant = "[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 var variableName = "(z|e|i|pi|t|c)";
-var functionName = "ln|log|lg|exp|gamma|abs|arg|sqrt|sinh?|cosh?|tanh?|asin|acos|atan|sech?|csch?|coth?|real|imag|conj|arg|sqrt";
+var functionName = "ln|log|lg|exp|gamma|abs|arg|sqrt|sinh?|cosh?|tanh?|asin|acos|atan|sech?|csch?|coth?|real|imag|conj|arg|sqrt|li";
 var identifier = functionName + "|" + variableName;
-var symbol = "[\\[\\]()+*/^!-]";
+var symbol = "[\\[\\]()+*/^!-_]";
 var whitespace = "(\\s|\\t|\\n|\\r|\\v)+";
 
 function tokenize(expression) {
@@ -31,8 +31,8 @@ function tokenize(expression) {
 	| {numericConstant}
 	| '(' {expression} ')'
 	| '[' {expression} ']'
-	| {functionName} '(' {expression} ')'
-	| {functionName} '[' {expression} ']'
+	| {functionName} ['_' {atomicExpression}] '(' {expression} ')'
+	| {functionName} ['_' {atomicExpression}] '[' {expression} ']'
 	exponentialExpression:
 	['-']{atomicExpression}+ ['^' {exponentialExpression}]
 	multiplicativeExpression:
@@ -84,10 +84,27 @@ function parse(inputStream) {
 			return token;
 		} else return false;
 	}
+	
+	function parseSubscript() {
+		var i0 = i;
+		if (inputStream[i] == '_') {
+			++i;
+			exp = parseAtomicExpression();
+			if (!exp) {
+				i = i0;
+				return false;
+			} else {
+				return exp;
+			}
+		} else {
+			return false;
+		}
+	}
 
 	function parseAtomicExpression() {
 		var i0 = i;
 		var fn = parseFunctionName();
+		var ss = parseSubscript();
 		var closer;
 		if (inputStream[i] == '(') closer = ')';
 		else if (inputStream[i] == '[') closer = ']';
@@ -105,7 +122,15 @@ function parse(inputStream) {
 			 i = i0;
 			 return false;
 		}
-		return fn ? [fn, inner] : inner;
+		if (fn) {
+			if (ss) {
+				return [fn, ss, inner];
+			} else {
+				return [fn, inner];
+			}
+		} else {
+			return inner;
+		}
 	}
 	//takes care of implied multiplication and unitary negation as well
 	function parseExponentialExpression() {
@@ -211,7 +236,11 @@ function toGLSL(expression) {
 		return "{oops: " + expression + "}";
 	}
 	if (expression[0].match("^(" + functionName + ")$")) {
-		return "c_" + expression[0] + "(" + toGLSL(expression[1]) + ")";
+		if (expression.length == 3) {
+			return "c_" + expression[0] + "(" + toGLSL(expression[1]) + ", " + toGLSL(expression[2]) + ")";
+		} else {
+			return "c_" + expression[0] + "(" + toGLSL(expression[1]) + ")";
+		}
 	}
 	switch(expression[0]) {
 		case "+":
