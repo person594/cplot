@@ -144,7 +144,7 @@ precision mediump float;
 			
 			for (int i = 0; i < LI_ITERATIONS; ++i) {
 				vec2 k = vec2(i+1, 0);
-				sm += c_div(c_pow(z, k), c_pow(k, s));
+				sm += _div(_pow(z, k), _pow(k, s));
 			}
 			return sm;
 		}
