@@ -347,10 +347,10 @@ function setup(vSource, fSource, dSource, textures) {
 	u_stieltjes_data = gl.getUniformLocation(dataProgram, "u_stieltjes");
 	
 	gl.useProgram(dataProgram);
-	gl.uniform1fv(u_stieltjes_data, scaled_stieltjes);
+	gl.uniform1fv(u_stieltjes_data, scaled_stieltjes_ratios);
 	
 	gl.useProgram(visualProgram);
-	gl.uniform1fv(u_stieltjes_visual, scaled_stieltjes);
+	gl.uniform1fv(u_stieltjes_visual, scaled_stieltjes_ratios);
 	var textureUniforms = {};
 	var i = 0;
 	for (texture in textures) {
