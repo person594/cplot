@@ -1,6 +1,6 @@
 var numericConstant = "[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
 var variableName = "(z|e|i|pi|t|c)";
-var functionName = "ln|log|lg|exp|gamma|abs|arg|sqrt|sinh?|cosh?|tanh?|asin|acos|atan|sech?|csch?|coth?|real|imag|conj|arg|sqrt|li";
+var functionName = "ln|log|lg|exp|gamma|abs|arg|sqrt|sinh?|cosh?|tanh?|asin|acos|atan|sech?|csch?|coth?|real|imag|conj|arg|sqrt|zeta";
 var identifier = functionName + "|" + variableName;
 var symbol = "[\\[\\]()+*/^!-_]";
 var whitespace = "(\\s|\\t|\\n|\\r|\\v)+";

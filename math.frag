@@ -139,3 +139,16 @@ uniform float stieltjes[100];
 			}
 			return result;
 		}
+		
+		vec2 c_zeta(vec2 s) {
+			s.x -= 1.0
+			
+			vec2 s_to_the_n = vec2(1, 0);
+
+			vec2 sm = vec2(0);
+			for (int n = 0; n < 100; ++n) {
+				sm += stieltjes[n] * s_to_the_n;
+				s_to_the_n = _mul(s_to_the_n, s);
+			}
+			return _inv(s) + sm;
+		}
