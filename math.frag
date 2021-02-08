@@ -147,12 +147,9 @@ uniform float u_stieltjes[100];
 
 			vec2 sm = vec2(0);
 			
-			for (int n = 0; n < 100; ++n) {
+			for (int n = 0; n < 20; ++n) {
 				sm += u_stieltjes[n] * s_to_the_n;
 				s_to_the_n = _mult(s_to_the_n, s);
-				if (s_to_the_n != s_to_the_n) {
-					s_to_the_n = vec2(0);
-				}
 			}
 			return c_inv(s) + sm;
 		}
