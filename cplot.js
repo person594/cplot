@@ -2,6 +2,8 @@ var u_t_visual = null;
 var u_t_data = null
 var u_c_visual = null;
 var u_c_data = null;
+var u_stieltjes_visual = null;
+var u_stieltjes_data = null;
 var uBoundsVisual = null;
 var uBoundsData = null;
 var u_coloring_mode = null;
@@ -341,7 +343,14 @@ function setup(vSource, fSource, dSource, textures) {
 	u_t_visual = gl.getUniformLocation(visualProgram, "u_t");
 	u_t_data = gl.getUniformLocation(dataProgram, "u_t");
 	
+	u_stieltjes_visual = gl.getUniformLocation(visualProgram, "u_stieltjes");
+	u_stieltjes_data = gl.getUniformLocation(dataProgram, "u_stieltjes");
+	
+	gl.useProgram(dataProgram);
+	gl.uniform1fv(u_stieltjes_data, stieltjes);
+	
 	gl.useProgram(visualProgram);
+	gl.uniform1fv(u_stieltjes_visual, stieltjes);
 	var textureUniforms = {};
 	var i = 0;
 	for (texture in textures) {

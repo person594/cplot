@@ -1,5 +1,7 @@
 precision mediump float;
 
+uniform float stieltjes[100];
+
 		#define PI 3.1415926535898
 		
 		vec2 i = vec2(0, 1);
@@ -137,30 +139,3 @@ precision mediump float;
 			}
 			return result;
 		}
-		
-		vec2 c_G(vec2 m, vec2 z, vec2 y) {
-			#define G_ITERATIONS 20
-			vec2 sm = vec2(0);
-			for (int i = 0; i < G_ITERATIONS; ++i) {
-				vec2 j = vec2(i, 0);
-				sm += _mult(_pow(j,-m), _pow(_div(y, z), j));
-			}
-			return sm;
-		}
-		
-		vec2 c_li(vec2 s, vec2 z) {
-			return -c_G(s, c_inv(z), vec2(1,0));
-			
-			/*
-			#define LI_ITERATIONS 20
-			vec2 sm = vec2(0, 0);
-			
-			for (int i = 0; i < LI_ITERATIONS; ++i) {
-				vec2 k = vec2(i+1, 0);
-				sm += _div(_pow(z, k), _pow(k, s));
-			}
-			return sm;
-			*/
-		}
-		
-		
