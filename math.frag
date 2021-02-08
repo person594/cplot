@@ -154,7 +154,7 @@ uniform float u_stieltjes[100];
 			for (int n = 0; n <= 100; ++n) {
 				// we want sm += e^(ln gamma + ln s^n)
 				// since gamma can be negative, do some trickery
-				float loggamma = c_ln(vec2(u_stieltjes[n], 0));
+				vec2 loggamma = c_ln(vec2(u_stieltjes[n], 0));
 				sm += exp(loggamma + float(n) * logs);
 			}
 			return c_inv(s) + sm;
