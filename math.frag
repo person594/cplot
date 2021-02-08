@@ -141,7 +141,7 @@ uniform float stieltjes[100];
 		}
 		
 		vec2 c_zeta(vec2 s) {
-			s.x -= 1.0
+			s.x -= 1.0;
 			
 			vec2 s_to_the_n = vec2(1, 0);
 
