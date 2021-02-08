@@ -1,6 +1,6 @@
 precision mediump float;
 
-uniform float stieltjes[100];
+uniform float u_stieltjes[100];
 
 		#define PI 3.1415926535898
 		
@@ -146,8 +146,9 @@ uniform float stieltjes[100];
 			vec2 s_to_the_n = vec2(1, 0);
 
 			vec2 sm = vec2(0);
+			
 			for (int n = 0; n < 100; ++n) {
-				sm += stieltjes[n] * s_to_the_n;
+				sm += u_stieltjes[n] * s_to_the_n;
 				s_to_the_n = _mult(s_to_the_n, s);
 			}
 			return c_inv(s) + sm;
