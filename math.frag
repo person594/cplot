@@ -149,7 +149,7 @@ uniform float u_stieltjes[100];
 			
 			// we will work in log space so that s^n doesn't get too big
 			
-			vec2 logs = _ln(s);
+			vec2 logs = c_ln(s);
 			
 			for (int n = 0; n <= 100; ++n) {
 				// we want sm += e^(ln gamma + ln s^n)
