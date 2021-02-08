@@ -154,7 +154,7 @@ uniform float u_stieltjes[100];
 			for (int n = 0; n <= 100; ++n) {
 				// we want sm += e^(ln gamma + ln s^n)
 				// since gamma can be negative, do some trickery
-				loggamma = log(abs(gamma));
+				float loggamma = log(abs(gamma));
 				if (gamma > 0) {
 					sm += exp(loggamma + float(n) * logs);
 				else {
