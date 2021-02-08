@@ -150,6 +150,9 @@ uniform float u_stieltjes[100];
 			for (int n = 0; n < 100; ++n) {
 				sm += u_stieltjes[n] * s_to_the_n;
 				s_to_the_n = _mult(s_to_the_n, s);
+				if (s_to_the_n != s_to_the_n) {
+					s_to_the_n = vec2(0);
+				}
 			}
 			return c_inv(s) + sm;
 		}
