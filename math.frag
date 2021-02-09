@@ -143,15 +143,23 @@ uniform float u_stieltjes[100];
 		vec2 c_zeta(vec2 s) {
 			s.x -= 1.0;
 			
-			vec2 s_to_the_n = vec2(1, 0);
+			vec2 c = vec2(0);
+			
+			vec2 term = vec2(1, 0);
 
 			vec2 sm = vec2(0);
 			
 			for (int n = 0; n <= 100; ++n) {
 				float gamma = u_stieltjes[n];
-				s_to_the_n *= gamma;
-				sm += s_to_the_n;
-				s_to_the_n = _mult(s_to_the_n, s);
+				term *= gamma;
+				
+				vec2 y = term - c;
+				vec2 t = sm + y;
+				c = (t - sm) - y;
+				
+				sm = t;
+
+				term = _mult(term, s);
 			}
 			return c_inv(s) + sm;
 		}
