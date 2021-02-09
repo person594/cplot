@@ -155,7 +155,8 @@ uniform float u_stieltjes[100];
 				
 				vec2 y = term - c;
 				vec2 t = sm + y;
-				c = (t - sm) - y;
+				c = (t - sm);
+				c -= y;
 				
 				sm = t;
 
