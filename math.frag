@@ -137,3 +137,90 @@ precision mediump float;
 			}
 			return result;
 		}
+
+
+	vec2 zeta_alt(vec2 z) {
+		// applicable for z with real part >= 0 and small imaginary part
+		// usees an alternating series
+		//Implementation of proposition 1 from page 3 of http://numbers.computation.free.fr/Constants/Miscellaneous/zetaevaluations.pdf
+		#define ZETA_ITERATIONS 50
+		float r[ZETA_ITERATIONS];
+		r[0] = 1.0;
+		r[1] = 1.0;
+		r[2] = 1.0;
+		r[3] = 1.0;
+		r[4] = 1.0;
+		r[5] = 1.0;
+		r[6] = 1.0;
+		r[7] = 1.0;
+		r[8] = 1.0;
+		r[9] = 1.0;
+		r[10] = 1.0;
+		r[11] = 0.9999999999999991;
+		r[12] = 0.9999999999999853;
+		r[13] = 0.9999999999997845;
+		r[14] = 0.999999999997308;
+		r[15] = 0.9999999999710746;
+		r[16] = 0.999999999730425;
+		r[17] = 0.9999999978052277;
+		r[18] = 0.9999999842921771;
+		r[19] = 0.9999999006381278;
+		r[20] = 0.9999994418278422;
+		r[21] = 0.999997203728888;
+		r[22] = 0.9999874611374573;
+		r[23] = 0.9999495073899706;
+		r[24] = 0.999816871155403;
+		r[25] = 0.9994002309671448;
+		r[26] = 0.998221949891754;
+		r[27] = 0.995218197716334;
+		r[28] = 0.9883095677128684;
+		r[29] = 0.973965697070464;
+		r[30] = 0.9470770175272452;
+		r[31] = 0.9015752858835114;
+		r[32] = 0.8321038920345966;
+		r[33] = 0.7364957080523137;
+		r[34] = 0.6180557189399335;
+		r[35] = 0.48622686149311023;
+		r[36] = 0.35470746145813403;
+		r[37] = 0.2374550677949638;
+		r[38] = 0.14439369429808976;
+		r[39] = 0.07894393711347507;
+		r[40] = 0.03838994199718532;
+		r[41] = 0.016409456839304695;
+		r[42] = 0.006081277066324643;
+		r[43] = 0.0019217474833351398;
+		r[44] = 0.0005069858540111238;
+		r[45] = 0.00010852115541499642;
+		r[46] = 1.8090800979659343e-05;
+		r[47] = 2.2018711680970302e-06;
+		r[48] = 1.7394196846341903e-07;
+		r[49] = 6.690075710131501e-09;
+
+		vec2 sum = vec2(0, 0);
+		float sign = 1.0;
+		for (int k = 1; k <= ZETA_ITERATIONS; ++k) {
+			vec2 term = vec2(sign*r[k], 0);
+			float logk = log(float(k));
+			term = _div(term, c_exp(logk*z));
+			sum += term;
+			sign *= -1.0;
+		}
+		float log2 = log(2.0);
+		vec2 one = vec2(1, 0);
+		sum = _div(sum, (one - c_exp(log2 * (one-z))));
+		return sum;
+	}
+	
+	vec2 c_zeta(vec2 z) {
+		if (z.x >= 0.0) {
+			return zeta_alt(z);
+		} else {
+			vec2 res = zeta_alt(vec2(1, 0) - z);
+			res = _mult(res, _pow(vec2(2.0*PI, 0), z));
+			res = _div(res, 2.0*c_gamma(z));
+			res = _div(res, c_cos(PI*z / 2.0));
+			return res;
+			//return zomz * _pow(vec2(2.0*PI, 0), z) / 2.0*c_gamma(z) / c_cos(PI*z / 2.0);
+		}
+		
+	}
